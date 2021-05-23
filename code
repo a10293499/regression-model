@@ -1,0 +1,99 @@
+setwd("D:/R/線性分析")
+
+
+
+
+#read 
+insurance <- read.csv("insurance.csv")
+
+str(insurance)
+#to factor
+insurance$sex <- as.factor(insurance$sex)
+insurance$smoker <- as.factor(insurance$smoker)
+insurance$region <- as.factor(insurance$region)
+
+str(insurance)
+
+
+#data examination
+summary(insurance)
+
+#charge distribution
+hist(insurance$charges, main="Histogram of charges",xlab="charges") #right-skewed
+hist(log(insurance$charges), main="Histogram of charges(log)",xlab="charges")
+
+#check outlier
+par(mfrow=c(1,2))
+boxplot(insurance$age,main="boxplot of age")
+boxplot(insurance$bmi,main="boxplot of BMI")
+
+
+#remove outlier(#Q1-1.5 x IQR or Q3 + 1.5 x IQR)
+rm_outlier <- function(data,x){
+  
+  QL <- quantile(data[,x], probs = 0.25)
+  QH <- quantile(data[,x], probs = 0.75)
+  IQR <- QH-QL
+  
+  if (identical(which(data[,x]< QL-1.5*IQR),integer(0))==FALSE){
+  data <- data[-(which(data[,x]< QL-1.5*IQR)),]
+  }
+  if (identical(which(data[,x]> QH+1.5*IQR),integer(0))==FALSE){
+    data <- data[-(which(data[,x]> QH+1.5*IQR)),]
+  }
+  return(data)
+}
+
+insurance_new <- rm_outlier(insurance,3)
+
+
+
+#training/testing data
+set.seed(123)
+library(caTools)
+split <- sample.split(insurance_new,SplitRatio = 0.8)
+train <- subset(insurance_new,split==TRUE)
+test <- subset(insurance_new,split==FALSE)
+
+#linear model
+regressor <- lm(log(charges)~.,data=train)
+summary(regressor)
+
+#check model
+library(ggfortify)
+autoplot(regressor)
+
+
+#regression tree
+library(rpart)
+library(rpart.plot)
+regressor_tree <- rpart(log(charges)~.,data=train,method='anova')
+par(mfrow=c(1,1))
+rpart.plot(regressor_tree)
+plotcp(regressor_tree)
+
+regressor_tree$cptable
+#最小交叉驗證0.193
+
+library(MLmetrics)
+pred <- as.numeric(predict(regressor_tree,newdata=test))
+p <- log(test$charges)
+RMSE(pred,p)
+
+#Bagging with ipred
+library(ipred)
+set.seed(123)
+bagged_tree  <- bagging(log(charges)~.,data=train,coob=TRUE)
+bagged_tree
+#RMSE降低
+
+
+#Bagging with caret
+library(caret)
+#建立10fold cross validation
+ctree <- trainControl(method='cv',number=10)
+
+bagged_ctree <- train(log(charges)~.,data=train,method = 'treebag', trControl=ctree,importance=TRUE)
+bagged_ctree #與上面相比RMSE最低 
+#重要係數排列
+plot(varImp(bagged_ctree))
