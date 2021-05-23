@@ -7,7 +7,7 @@
     * 以變數(年齡 性別 BMI 撫養兒童數 是否吸菸 居住地區)建立模型(線性模型及迴歸樹)，預測保險費用
 
  * 方法與結果
-    *[R code]()
+    * [R code](https://github.com/a10293499/regression-model/blob/main/code)
    
     * 資料讀取
     
@@ -42,4 +42,7 @@
     > - 建立10-fold crodd validation
     > - RMSE:0.375(與上述相比最低)
     > - Rsquared: 0.833
+    > - 確認變數是最重要的，圖5由上而下，最重要為年齡，其次為BMI值
+    > - ![variable importance](https://github.com/a10293499/regression-model/blob/main/variable%20important.png)
+      > - 圖5:變數重要性
     
