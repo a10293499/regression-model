@@ -1,7 +1,8 @@
-#  Regression model in R
-## machine learning in R
+#  保險費用預測 
+
+## Regression model in R
  * 資料
-    * 資料名:保險費用預測 (A dataset for heart attack classification) 
+    * 資料名:心臟病發作分類資料集 (A dataset for heart attack classification) 
     * 資料來源:<https://www.kaggle.com/mirichoi0218/insurance> 
  * 目標
     * 以變數(年齡 性別 BMI 撫養兒童數 是否吸菸 居住地區)建立模型(線性模型及迴歸樹)，預測保險費用
