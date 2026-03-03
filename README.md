@@ -1,6 +1,6 @@
-#  保險費用預測 
+#   心臟病風險與保險溢價之預測分析　
+## Predictive Analytics for Heart Disease Risk & Insurance Premiums
 
-## Regression model in R
  * 資料
     * 資料名:心臟病發作分類資料集 (A dataset for heart attack classification) 
     * 資料來源:<https://www.kaggle.com/mirichoi0218/insurance> 
@@ -43,7 +43,7 @@
     > - 建立10-fold crodd validation
     > - RMSE:0.375(與上述相比最低)
     > - Rsquared: 0.833
-    > - 確認變數是最重要的，圖5由上而下，最重要為年齡，其次為BMI值
+    > - 確認哪個變數是最重要的，圖5由上而下，最重要為年齡，其次為BMI值
     > - ![variable importance](https://github.com/a10293499/regression-model/blob/main/variable%20important.png)
       > - 圖5:變數重要性
     
